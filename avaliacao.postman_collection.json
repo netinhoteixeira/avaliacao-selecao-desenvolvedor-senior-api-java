@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "487797af-8661-4487-b34a-f56bcb748b54",
+		"name": "Avaliação",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Comum",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let headerValue = pm.response.headers.get('Authorization');\r",
+							"headerValue = headerValue.replace('Bearer ','');\r",
+							"pm.collectionVariables.set('BEARER_TOKEN', headerValue);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\": \"comum\",\r\n    \"senha\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/login",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let headerValue = pm.response.headers.get('Authorization');\r",
+							"headerValue = headerValue.replace('Bearer ','');\r",
+							"pm.collectionVariables.set('BEARER_TOKEN', headerValue);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usuario\": \"admin\",\r\n    \"senha\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/login",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Perfil",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVIDOR}}/profile/me",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"profile",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CEP válido",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVIDOR}}/util/cep/70610432",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"util",
+						"cep",
+						"70610432"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CEP não existente",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVIDOR}}/util/cep/70610999",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"util",
+						"cep",
+						"70610999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CEP inválido",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVIDOR}}/util/cep/706104X",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"util",
+						"cep",
+						"706104X"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente inserir",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adelmar da Luz\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-9999\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"valor\": \"meuemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente inserir Nome -3 caracteres",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Ad\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-9999\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"valor\": \"meuemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente inserir Nome !",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adam !\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-9999\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"valor\": \"meuemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente inserir CPF Inválido",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adam Liam\",\r\n    \"cpf\": \"731.441.234-0\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-9999\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"valor\": \"meuemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente inserir CEP vazio",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adam Liam\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-9999\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"valor\": \"meuemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente editar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adelmar da Luzi\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"id\": 1,\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-8888\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"valor\": \"meuemail@email.com\",\r\n            \"removido\": true\r\n        },\r\n        {\r\n            \"valor\": \"meunovoemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/1",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente remover",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adelmar da Luzi\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"id\": 1,\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-8888\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"valor\": \"meuemail@email.com\",\r\n            \"removido\": true\r\n        },\r\n        {\r\n            \"valor\": \"meunovoemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/2",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente obter",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adelmar da Luzi\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"id\": 1,\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-8888\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"valor\": \"meuemail@email.com\",\r\n            \"removido\": true\r\n        },\r\n        {\r\n            \"valor\": \"meunovoemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/1",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente obter lista",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{BEARER_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Adelmar da Luzi\",\r\n    \"cpf\": \"731.441.234-04\",\r\n    \"endereco\": {\r\n        \"cep\": \"70610-432\",\r\n        \"logradouro\": \"SIG Quadra 3 Bloco B\",\r\n        \"bairro\": \"Zona Industrial\",\r\n        \"cidade\": \"Brasília\",\r\n        \"uf\": \"DF\"\r\n    },\r\n    \"telefones\": [\r\n        {\r\n            \"id\": 1,\r\n            \"tipo\": 1,\r\n            \"valor\": \"(61) 9999-8888\"\r\n        }\r\n    ],\r\n    \"emails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"valor\": \"meuemail@email.com\",\r\n            \"removido\": true\r\n        },\r\n        {\r\n            \"valor\": \"meunovoemail@email.com\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVIDOR}}/cliente/",
+					"host": [
+						"{{SERVIDOR}}"
+					],
+					"path": [
+						"cliente",
+						""
+					],
+					"query": [
+						{
+							"key": "pagina",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "tamanho",
+							"value": "10",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SERVIDOR",
+			"value": "localhost:8080"
+		},
+		{
+			"key": "BEARER_TOKEN",
+			"value": null
+		}
+	]
+}
