@@ -40,13 +40,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
+import static java.util.Collections.singletonList;
+import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @SuppressWarnings("deprecation")
@@ -61,10 +67,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 // DONE: Fix CORS problem
-                .cors() //
+                .cors().configurationSource(request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedHeaders(Collections.singletonList("*"));
+            config.setAllowedMethods(Collections.singletonList("*"));
+            config.addAllowedOrigin("http://localhost:3000");
+            config.addAllowedOrigin("http://localhost:4200");
+            config.addAllowedOrigin("http://162.243.174.113");
+            config.setAllowCredentials(true);
+
+            return config;
+        }) //
                 .and() //
                 .csrf() //
                 .disable() //
+                //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                //.and()
                 .authorizeRequests() //
                 .antMatchers(HttpMethod.GET, "/").permitAll() //
                 .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll() //
@@ -80,7 +98,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "**/*.ico")
                 .anonymous()
                 // DONE: Fix CORS problem
-                .antMatchers(HttpMethod.OPTIONS).permitAll().antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //
+                .antMatchers(HttpMethod.POST, "/login").permitAll() //
                 // DONE: It is permit access for all
                 // .antMatchers("/**").permitAll();
                 // DONE: It is restrict with authentication
@@ -88,7 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and() //
                 .addFilter(new CustomAuthenticationFilter(authenticationManager())) //
                 .addFilter(new CustomAuthorizationFilter(authenticationManager())) //
-                .sessionManagement().sessionCreationPolicy(STATELESS);
+                .sessionManagement().sessionCreationPolicy(STATELESS); //
     }
 
     public @Bean
@@ -101,20 +120,66 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 
-    // DONE: Fix CORS problem
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("authorization", "x-auth-token"));
+// TRY 1
+//    // DONE: Fix CORS problem
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowCredentials(true);
+//        configuration.setAllowedOrigins(Collections.singletonList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+//        configuration.setExposedHeaders(Arrays.asList("authorization", "x-auth-token"));
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//
+//        return source;
+//    }
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+// TRY 2
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        List<String> allowOrigins = Arrays.asList("*");
+//        configuration.setAllowedOrigins(allowOrigins);
+//        configuration.setAllowedMethods(singletonList("*"));
+//        configuration.setAllowedHeaders(singletonList("*"));
+//        //in case authentication is enabled this flag MUST be set, otherwise CORS requests will fail
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
-        return source;
-    }
+// TRY 3
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));// if your front end running on localhost:5000
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
+// TRY 4
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        final CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("*"); // this allows all origin
+//        config.addAllowedHeader("*"); // this allows all headers
+//        config.addAllowedMethod("OPTIONS");
+//        config.addAllowedMethod("HEAD");
+//        config.addAllowedMethod("GET");
+//        config.addAllowedMethod("PUT");
+//        config.addAllowedMethod("POST");
+//        config.addAllowedMethod("DELETE");
+//        config.addAllowedMethod("PATCH");
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
 
 }
