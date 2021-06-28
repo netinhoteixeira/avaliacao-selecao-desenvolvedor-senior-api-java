@@ -11,3 +11,5 @@ Repositório principal: https://github.com/netinhoteixeira/avaliacao-selecao-des
 ## Swagger
 
 O acesso ao Swagger local é através do endereço: http://localhost:8080/swagger-ui.html
+
+O acesso ao Swagger remoto é através do endereço: http://162.243.174.113:8080
