@@ -1,0 +1,32 @@
+spring:
+  redis:
+    database: '0'
+    host: localhost
+    port: '6379'
+    timeout: '60000'
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      generate-ddl: 'false'
+      ddl-auto: none
+      use-new-id-generator-mappings: 'false'
+  datasource:
+    password: root
+    username: root
+    url: jdbc:mysql://localhost:3306/avaliacao?serverTimezone=UTC&useSSL=false&useUnicode=yes&characterEncoding=utf8
+  jackson:
+    default-property-inclusion: NON_NULL
+logging:
+  level:
+    guru:
+      springframework:
+        controllers: debug
+    org:
+      springframework:
+        web: info
+      hibernate: error
+springdoc:
+  swagger-ui:
+    use-root-path: 'true'
