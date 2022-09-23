@@ -62,7 +62,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     private ClienteEmailRepository clienteEmailRepository;
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public PaginaDto obterPagina(int pagina, int tamanho) {
         PaginaDto paginaDto = new PaginaDto();
@@ -90,7 +90,7 @@ public class ClienteServiceImpl implements ClienteService {
         return paginaDto;
     }
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public ClienteDto obter(Long id) {
         Optional<Cliente> ocliente = clienteRepository.findById(id);
@@ -99,7 +99,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .orElse(null);
     }
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public ClienteDto inserir(ClientePostRequestDto clientePost)
             throws IllegalAccessException, InvocationTargetException {
@@ -169,7 +169,7 @@ public class ClienteServiceImpl implements ClienteService {
         return preparaResposta(cliente, telefones, emails);
     }
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public ClienteDto editar(ClientePutRequestDto clientePut) throws IllegalAccessException, InvocationTargetException {
         Optional<Cliente> ocliente = clienteRepository.findById(clientePut.getId());
@@ -303,7 +303,7 @@ public class ClienteServiceImpl implements ClienteService {
         return preparaResposta(cliente, telefones, emails);
     }
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public void remover(Long id) throws IllegalAccessException, InvocationTargetException {
         clienteRepository.deleteById(id);

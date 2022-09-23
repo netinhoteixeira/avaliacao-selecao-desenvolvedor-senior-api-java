@@ -8,6 +8,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+      javax:
+        persistence:
+          query:
+            timeout: 10000
     hibernate:
       generate-ddl: 'false'
       ddl-auto: none

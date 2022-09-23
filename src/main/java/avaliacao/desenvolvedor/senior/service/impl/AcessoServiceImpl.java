@@ -43,13 +43,13 @@ public class AcessoServiceImpl implements AcessoService {
     @Autowired
     private AcessoRepository acessoRepository;
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public Acesso findByUsuario(String usuario) {
         return acessoRepository.findByUsuario(usuario);
     }
 
-    @Transactional
+    @Transactional(timeout = 10)
     @Override
     public AcessoDto getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
